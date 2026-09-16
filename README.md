@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Our Little World 🎀
 
-## Getting Started
+> A private digital scrapbook for two — built to feel like *our thing*, not an app.
 
-First, run the development server:
+A full-stack web application to preserve trips, memories, love letters, milestones, and little moments together. Mobile-first, beautifully designed, and completely private.
+
+---
+
+## Quick Start
 
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Add your Supabase credentials
+cp .env.local.example .env.local
+# → Edit .env.local with your Supabase URL and anon key
+
+# 3. Run the database schema
+# → Paste supabase/schema.sql into Supabase SQL Editor and run it
+
+# 4. Start the app
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) — sign up, and your world is created automatically.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Full setup instructions: **[SETUP.md](./SETUP.md)**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+| Section | What it does |
+|---|---|
+| 🏠 **Home** | Days together counter, memory stats, latest memory, "on this day" |
+| ✈️ **Trips** | Scrapbook-cover trip cards, trip detail with all memories inside |
+| 📸 **Memories** | Photo memories with moods, tags, search, filters, favorites |
+| 💌 **Letters** | Private love letters with "open when" conditions and date locks |
+| 💗 **Us** | Relationship timeline, milestone events, couple stats |
+| ✨ **Future** | Bucket list of things to do together, with satisfying completion |
+| ⚙️ **Settings** | World name, tagline, anniversary date, nicknames |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Tech Stack
 
-## Deploy on Vercel
+- **[Next.js 16](https://nextjs.org)** — App Router, TypeScript
+- **[Tailwind CSS](https://tailwindcss.com)** — custom kawaii design system
+- **[shadcn/ui](https://ui.shadcn.com)** — accessible component primitives
+- **[Supabase](https://supabase.com)** — auth, PostgreSQL, photo storage
+- **[Lucide React](https://lucide.dev)** — icons
+- **[date-fns](https://date-fns.org)** — date formatting
+- **Google Fonts** — Dancing Script + Nunito
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── (auth)/          # Login, signup
+│   ├── (app)/           # Protected app routes
+│   │   ├── home/
+│   │   ├── trips/
+│   │   ├── memories/
+│   │   ├── letters/
+│   │   ├── us/
+│   │   ├── future/
+│   │   └── settings/
+│   ├── layout.tsx
+│   └── page.tsx         # Root redirect
+├── components/
+│   ├── cards/           # MemoryCard, TripCard, LetterCard
+│   ├── layout/          # SideNav, BottomNav, AddMemoryButton
+│   ├── shared/          # AddMemoryModal, PhotoUploader, EmptyState
+│   └── ui/              # shadcn/ui primitives
+├── lib/
+│   ├── supabase/        # Browser + server + middleware clients
+│   └── utils.ts
+├── types/               # TypeScript interfaces
+└── middleware.ts        # Auth protection
+supabase/
+└── schema.sql           # Full database schema + RLS policies
+```
+
+---
+
+## Environment Variables
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=       # Your Supabase project URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY=  # Your Supabase anon key
+```
+
+---
+
+## Deployment
+
+Deploy to Vercel in one step:
+
+1. Push this repo to GitHub
+2. Import it at [vercel.com/new](https://vercel.com/new)
+3. Add the two environment variables
+4. Deploy
+
+The app runs entirely on Supabase's free tier for personal use.
