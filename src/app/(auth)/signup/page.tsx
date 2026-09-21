@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Suspense, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import { Heart, Mail, Lock, User, Eye, EyeOff } from 'lucide-react';
@@ -10,14 +10,28 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
 export default function SignupPage() {
+  return (
+    <Suspense>
+      <SignupContent />
+    </Suspense>
+  );
+}
+
+function SignupContent() {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const searchParams = useSearchParams();
+
+  // If someone arrives at /signup with ?invite=CODE, carry the code
+  // so the trigger skips auto-world creation for them.
+  const inviteCode = searchParams.get('invite') || undefined;
+
+  const [name, setName]                 = useState('');
+  const [email, setEmail]               = useState('');
+  const [password, setPassword]         = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [loading, setLoading]           = useState(false);
+  const [error, setError]               = useState('');
+  const [success, setSuccess]           = useState(false);
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
@@ -29,7 +43,10 @@ export default function SignupPage() {
       email,
       password,
       options: {
-        data: { display_name: name },
+        data: {
+          display_name: name,
+          ...(inviteCode ? { invite_code: inviteCode } : {}),
+        },
       },
     });
 
@@ -50,13 +67,23 @@ export default function SignupPage() {
           <div className="text-5xl mb-4">🎀</div>
           <h1 className="font-display text-3xl text-[#3d2b2b] mb-2">You&apos;re in!</h1>
           <p className="text-[#8c7b7b] mb-2">Check your email to confirm your account.</p>
-          <p className="text-[#8c7b7b] text-sm">
-            Then{' '}
-            <Link href="/login" className="text-[#d94f6c] font-medium hover:underline">
-              sign in
-            </Link>{' '}
-            to start building your little world ♡
-          </p>
+          {inviteCode ? (
+            <p className="text-[#8c7b7b] text-sm">
+              Then{' '}
+              <Link href={`/join?code=${inviteCode}`} className="text-[#d94f6c] font-medium hover:underline">
+                return to the invite
+              </Link>{' '}
+              to finish joining ♡
+            </p>
+          ) : (
+            <p className="text-[#8c7b7b] text-sm">
+              Then{' '}
+              <Link href="/login" className="text-[#d94f6c] font-medium hover:underline">
+                sign in
+              </Link>{' '}
+              to start building your little world ♡
+            </p>
+          )}
         </div>
       </div>
     );
@@ -75,12 +102,18 @@ export default function SignupPage() {
             <Heart className="w-7 h-7 text-[#d94f6c] fill-[#d94f6c]" />
           </div>
           <h1 className="font-display text-3xl text-[#3d2b2b] mb-1">Our Little World</h1>
-          <p className="text-[#8c7b7b] text-sm">create your private corner ✨</p>
+          <p className="text-[#8c7b7b] text-sm">
+            {inviteCode ? 'create an account to join ♡' : 'create your private corner ✨'}
+          </p>
         </div>
 
         <div className="bg-white rounded-3xl shadow-lg p-6 border border-[#f0ddd8]">
-          <h2 className="text-[#3d2b2b] font-semibold text-lg mb-1">Create your world</h2>
-          <p className="text-[#8c7b7b] text-sm mb-6">Let&apos;s set up your private space</p>
+          <h2 className="text-[#3d2b2b] font-semibold text-lg mb-1">
+            {inviteCode ? 'Create your account' : 'Create your world'}
+          </h2>
+          <p className="text-[#8c7b7b] text-sm mb-6">
+            {inviteCode ? "You're one step away from joining." : "Let's set up your private space"}
+          </p>
 
           {error && (
             <div className="mb-4 p-3 bg-[#fde8e8] border border-[#f4b8c1] rounded-xl text-[#c0392b] text-sm">
@@ -99,7 +132,7 @@ export default function SignupPage() {
                   id="name"
                   type="text"
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={e => setName(e.target.value)}
                   placeholder="What should we call you?"
                   required
                   className="pl-10 rounded-xl border-[#f0ddd8] focus:border-[#d94f6c] bg-[#faf6f1]"
@@ -117,7 +150,7 @@ export default function SignupPage() {
                   id="email"
                   type="email"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
                   className="pl-10 rounded-xl border-[#f0ddd8] focus:border-[#d94f6c] bg-[#faf6f1]"
@@ -135,7 +168,7 @@ export default function SignupPage() {
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
                   minLength={6}
@@ -160,10 +193,10 @@ export default function SignupPage() {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <span className="animate-spin">🎀</span>
-                  Creating your world...
+                  {inviteCode ? 'Creating account...' : 'Creating your world...'}
                 </span>
               ) : (
-                "Let's begin ♡"
+                inviteCode ? 'Join Our World ♡' : "Let's begin ♡"
               )}
             </Button>
           </form>
@@ -171,7 +204,10 @@ export default function SignupPage() {
           <div className="mt-4 text-center">
             <p className="text-[#8c7b7b] text-sm">
               Already have a world?{' '}
-              <Link href="/login" className="text-[#d94f6c] font-medium hover:underline">
+              <Link
+                href={inviteCode ? `/login?next=/join?code=${inviteCode}` : '/login'}
+                className="text-[#d94f6c] font-medium hover:underline"
+              >
                 Come back in
               </Link>
             </p>

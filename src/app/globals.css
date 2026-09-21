@@ -227,3 +227,54 @@
 .pb-nav {
   padding-bottom: calc(4rem + env(safe-area-inset-bottom));
 }
+
+/* Invite page animations */
+@keyframes invite-float {
+  0%, 100% { transform: translateY(0px) rotate(-3deg); }
+  50%       { transform: translateY(-18px) rotate(3deg); }
+}
+
+@keyframes invite-fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes invite-pop-in {
+  0%   { transform: scale(0) rotate(-12deg); opacity: 0; }
+  65%  { transform: scale(1.15) rotate(4deg); opacity: 1; }
+  85%  { transform: scale(0.97) rotate(-1deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes heart-rise {
+  0%   { opacity: 0; transform: translateY(0) scale(0.4); }
+  15%  { opacity: 1; transform: translateY(-24px) scale(1); }
+  80%  { opacity: 0.7; transform: translateY(-90px) scale(1.15); }
+  100% { opacity: 0; transform: translateY(-130px) scale(0.6); }
+}
+
+@keyframes invite-wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  20%      { transform: rotate(-10deg); }
+  40%      { transform: rotate(10deg); }
+  60%      { transform: rotate(-6deg); }
+  80%      { transform: rotate(6deg); }
+}
+
+@keyframes celebration-burst {
+  0%   { transform: scale(0) rotate(-8deg); opacity: 0; }
+  55%  { transform: scale(1.25) rotate(5deg); opacity: 1; }
+  80%  { transform: scale(0.95) rotate(-2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes cat-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95%           { transform: scaleY(0.1); }
+}
+
+.invite-float    { animation: invite-float 3s ease-in-out infinite; }
+.invite-fade-up  { animation: invite-fade-up 0.6s ease-out both; }
+.invite-pop-in   { animation: invite-pop-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.invite-wiggle   { animation: invite-wiggle 0.5s ease-in-out; }
+.celebration-burst { animation: celebration-burst 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both; }

@@ -46,7 +46,9 @@ export function AddMemoryModal({ open, onClose, tripId }: AddMemoryModalProps) {
         .from('world_members')
         .select('world_id')
         .eq('user_id', user.id)
-        .single();
+        .order('role', { ascending: false })
+        .limit(1)
+        .maybeSingle();
 
       if (!member) throw new Error('No world found. Please set up your world first.');
 
