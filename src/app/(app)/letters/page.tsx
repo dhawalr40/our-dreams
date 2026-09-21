@@ -22,7 +22,9 @@ export default function LettersPage() {
       .from('world_members')
       .select('world_id')
       .eq('user_id', user.id)
-      .single();
+      .order('role', { ascending: false })
+      .limit(1)
+      .maybeSingle();
     if (!member) { setLoading(false); return; }
 
     const { data } = await supabase

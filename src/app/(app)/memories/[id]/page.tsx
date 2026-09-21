@@ -22,7 +22,7 @@ export default function MemoryDetailPage() {
       const supabase = createClient();
       const { data } = await supabase
         .from('memories')
-        .select('*, photos:memory_photos(*), tags:memory_tags(tag:tags(*)), creator:users!created_by(display_name)')
+        .select('*, photos:memory_photos(*), tags:memory_tags(tag:tags(*))')
         .eq('id', id)
         .single();
 

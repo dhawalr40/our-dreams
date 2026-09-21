@@ -133,6 +133,20 @@ export interface WorldStats {
   favorite_count: number;
 }
 
+export interface WorldInvite {
+  id: string;
+  world_id: string;
+  created_by: string;
+  code: string;
+  status: 'pending' | 'accepted' | 'expired' | 'revoked';
+  message: string | null;
+  expires_at: string;
+  accepted_by: string | null;
+  accepted_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export type Mood = 'happy' | 'romantic' | 'adventurous' | 'peaceful' | 'funny' | 'nostalgic' | 'grateful' | 'excited';
 
 export const MOOD_LABELS: Record<Mood, string> = {

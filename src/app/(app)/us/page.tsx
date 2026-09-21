@@ -41,7 +41,9 @@ export default function UsPage() {
       .from('world_members')
       .select('world_id, worlds(*)')
       .eq('user_id', user.id)
-      .single();
+      .order('role', { ascending: false })
+      .limit(1)
+      .maybeSingle();
     if (!member) { setLoading(false); return; }
 
     const worldData = member.worlds as unknown as World;
