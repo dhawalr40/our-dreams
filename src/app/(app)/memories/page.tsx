@@ -43,6 +43,7 @@ export default function MemoriesPage() {
         .from('memories')
         .select('*, photos:memory_photos(*), tags:memory_tags(tag:tags(*))')
         .eq('world_id', member.world_id)
+        .is('trip_id', null)
         .order('date', { ascending: false });
 
       const mems = (data || []).map(m => ({
