@@ -33,7 +33,7 @@ export default function TripsPage() {
       .from('trips')
       .select('*, memory_count:memories(count)')
       .eq('world_id', member.world_id)
-      .order('start_date', { ascending: false });
+      .order('start_date', { ascending: true });
 
     const tripsWithCount = (data || []).map(t => ({
       ...t,
